@@ -10,19 +10,7 @@ function SET(){
 		if(elments[i].type== 'checkbox'){
 			form[window.location.href][i]["checked"]= elments[i].checked;
 		}
-		else if(elments[i].tagName== 'SELECT'){
-			form[window.location.href][i]["value"]= elments[i].value;
-			//Show options
-			form[window.location.href][i]["innerHTML"]= elments[i].innerHTML;
-		}
-		else{
-			//Show options
-			if(elements[i].list!= null){
-				form[window.location.href][i]["list"]= elments[i].getAttribute('list');
-				
-			}
-			form[window.location.href][i]["value"]= elments[i].value;
-		}
+		else form[window.location.href][i]["value"]= elments[i].value;
 	}
 	chrome.storage.local.set(form);
 }
