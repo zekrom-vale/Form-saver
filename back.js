@@ -6,10 +6,13 @@ chrome.contextMenus.create({"title":"Save form"}, function()=>{
 
 //EX
 // Called when the user clicks on the browser action.
-chrome.browserAction.onClicked.addListener(function(tab) {
-  // No tabs or host permissions needed!
-  console.log('Turning ' + tab.url + ' red!');
+chrome.browserAction.onClicked.addListener(function(tab){
+  console.log(tab.url + ' now has the page UI');
   chrome.tabs.executeScript({
-    code: 'document.body.style.backgroundColor="red"'
+	//Pop up the ui on the page!
+    file: 'assemble.js'
+  });
+  chrome.tabs.insertCSS({
+	file: 'assemble.css'
   });
 });

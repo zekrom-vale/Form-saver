@@ -1,37 +1,24 @@
-//http://ramkulkarni.com/blog/encrypting-data-with-crypto-js-in-javascript/
-
-function SET(){
-	console.warn('Form data is curently not encripted');
-	var form=[],
-	elments=document.querySelectorAll('input, textarea, select');
-	for(var i in elments){
-		form[window.location.href][i]={
-			"id": elments[i].id,
-			"type": elments[i].type,
-			"name": elments[i].name,
-			"tagName": elements[i].tagName
-		}
-		if(elments[i].type== 'checkbox'){
-			form[window.location.href][i].checked= elments[i].checked;
-		}
-		else form[window.location.href][i].value= elments[i].value;
+try{
+	var root= document.body.attachShadow({mode: 'closed'});
+	format(root);
+}catch(e){
+	console.warn('shadow root not supported');
+	var query= confirm('Shadow root not supported, data may be at risk.');
+	if(query===true){
+		var root= document.createElement('div-FS');
+		var warn= document.createElement('h1');
+		warn.innerHTML= 'Shadow root not supported, data may be at risk.  Do you trust this site?';
+		warn.id='warn';
+		root.appendChild(warn);
+		document.body.appendChild(root);
+		format(root);
 	}
-	chrome.storage.local.set(form);
+	else return;
 }
-function GET(){
-	chrome.storage.local.get(window.location.href, (items)=>{
-		for(var i=0; items[window.location.href].length>0; i++){
-			if(items[window.location.href][i].type!= 'checkbox'){
-				document.getElementById(items[window.location.href][i].id).value=items[window.location.href][i].value;
-			}
-			else{
-				document.getElementById(items[window.location.href][i].id).checked=items[window.location.href][i].checked;
-			}
-		}
-	});
-}
-function format(){
-	chrome.storage.local.get(null, (items)=>{
+
+
+function format(element){
+	chrome.storage.local.get(null, (items, element)=>{
 		var keys= Object.keys(items),
 		list= document.createElement('list');
 		for(var i in keys){
@@ -73,12 +60,25 @@ function format(){
 			//act
 			let act= document.createElement('button');
 			act.addEventListener('click', (key)=>{
-				
+				GET(key);
 			});
 			
 			//FINAL
 			option.appendChild(FORM);
 			list.appendChild(option);
+		}
+		element.appendChild(list);
+	});
+}
+function GET(URL){
+	chrome.storage.local.get(URL, (items)=>{
+		for(var i=0; items[URL].length>0; i++){
+			if(items[URL][i].type!= 'checkbox'){
+				document.getElementById(items[URL][i].id).value=items[URL][i].value;
+			}
+			else{
+				document.getElementById(items[URL][i].id).checked=items[URL][i].checked;
+			}
 		}
 	});
 }
