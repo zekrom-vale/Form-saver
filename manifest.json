@@ -1,0 +1,29 @@
+{
+	"manifest_version": 2,
+	"name": "Form Saver [ALPHA]",
+	"short_name": "FS a00",
+				 "version": "0.0.0",
+	"version_name":"Pro a00",
+	"author": "zekrom_vale",
+	"minimum_chrome_version": "20",
+	"description": "This extension saves form data, allowing users to continue off where they left",
+	"browser_action":{
+		"default_title": "Form Saver Actions",
+		"default_popup": "popup/act.html"
+	},
+	"homepage_url": "https://github.com/zekrom-vale",
+	"options_ui":{
+		"page": "popup/option.html"
+	},
+	"devtools_page": "https://github.com/zekrom-vale",
+	"offline_enabled": true,
+	"permissions":[
+		"storage",
+		"activeTab",
+		"contextMenus"
+	],
+	"background":{
+		"scripts": ["back.js"],
+		"persistent": false
+	}
+}

@@ -1,6 +1,7 @@
 //http://ramkulkarni.com/blog/encrypting-data-with-crypto-js-in-javascript/
 
 function SET(){
+	console.warn('Form data is curently not encripted');
 	var form=[],
 	elments=document.querySelectorAll('input, textarea, select');
 	for(var i in elments){
@@ -62,7 +63,7 @@ function format(){
 			let rem= document.createElement('button');
 			rem.classList.add('rem');
 			rem.addEventListener('click', (key)=>{
-				var query= confirm('Are you sure you want to remove this form?\n'+ key);
+				var query= confirm(`Are you sure you want to permanently delete this form?\n${key}`);
 				if(query===true){
 					chrome.storage.local.remove(key);
 					document.getElementById('option'+ key).classList.add('removed');
