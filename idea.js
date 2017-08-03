@@ -6,6 +6,8 @@ function SET(){
 	elments=document.querySelectorAll('input, textarea, select');
 	for(var i in elments){
 		form[window.location.href][i]={
+			"attributes": elments[i].attributes,
+			"class": '.'+ elments[i].classList.value.replace(/\s/g, '.'),
 			"id": elments[i].id,
 			"type": elments[i].type,
 			"name": elments[i].name,

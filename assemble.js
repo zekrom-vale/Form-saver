@@ -1,28 +1,39 @@
+const file= chrome.storage.local,
+inv.file= chrome.storage.sync;
+(function(){//Forces functions to be local
+//[We]mVrcm9t
+//(X[13]|I[FH])ZhbGU=
 try{
-	var root= document.body.attachShadow({mode: 'closed'});
-	format(root);
+	var root= document.body.attachShadow({mode: 'closed'});//Prevent external js actions
+	format(root, true);
 }catch(e){
-	console.warn('shadow root not supported');
-	var query= confirm('Shadow root not supported, data may be at risk.');
+	console.warn('[!SUPPORT]Shadow root not supported');
+	var query= confirm('Data may be accesed by other sorces on this page.\nDo you trust this site?');
 	if(query===true){
-		var root= document.createElement('div-FS');
-		var warn= document.createElement('h1');
-		warn.innerHTML= 'Shadow root not supported, data may be at risk.  Do you trust this site?';
+		var root= document.createElement('div-FS'),
+		warn= document.createElement('h1');
+		warn.innerHTML= 'Shadow root not supported, data may be at risk.';
 		warn.id='warn';
 		root.appendChild(warn);
 		document.body.appendChild(root);
+		format(root, 'pseudo');
+	}
+	else{
+		console.info('[LIMITED]');
 		format(root);
 	}
-	else return;
 }
 
-
-function format(element){
-	chrome.storage.local.get(null, (items, element)=>{
+function format(element, shadow=false){
+	file.get(null, (items, element)=>{
 		var keys= Object.keys(items),
 		list= document.createElement('list');
 		for(var i in keys){
 			if(/^opt/.test(keys[i])) continue;
+			if(shadow!=true){
+				var regURL= new RegExp('^'+ window.location.protocol+ ':\/{2,3}'+ escape(window.location.hostname));
+				if(regURL.test(keys[i])==false) continue;
+			}
 			var FORM= document.createElement('form');
 				let label= document.createElement('label');
 				label.innerHTML=keys[i];
@@ -52,7 +63,7 @@ function format(element){
 			rem.addEventListener('click', (key)=>{
 				var query= confirm(`Are you sure you want to permanently delete this form?\n${key}`);
 				if(query===true){
-					chrome.storage.local.remove(key);
+					file.remove(key);
 					document.getElementById('option'+ key).classList.add('removed');
 				}
 			});
@@ -71,14 +82,18 @@ function format(element){
 	});
 }
 function GET(URL){
-	chrome.storage.local.get(URL, (items)=>{
-		for(var i=0; items[URL].length>0; i++){
-			if(items[URL][i].type!= 'checkbox'){
-				document.getElementById(items[URL][i].id).value=items[URL][i].value;
+	file.get(URL, (items)=>{
+		var it= items[URL];
+		for(var i in it){
+			if(it[i].type!= 'checkbox'){
+				document.getElementById(it[i].id).value=it[i].value;
 			}
-			else{
-				document.getElementById(items[URL][i].id).checked=items[URL][i].checked;
-			}
+			else document.getElementById(it[i].id).checked=it[i].checked;
 		}
 	});
+}
+//
+})();
+function escape(s){
+	return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 }
