@@ -51,7 +51,8 @@ function format(element, shadow=false){
 			}
 			//option
 			var option= document.createElement('div');
-			option.id= 'option'+ key;
+			//option.id= 'option'+ key;
+			option.setAttribute('URL', key);
 			option.classList.add('option');
 			//bar
 			var bar= document.createElement('div');
@@ -60,11 +61,13 @@ function format(element, shadow=false){
 			//rem
 			let rem= document.createElement('button');
 			rem.classList.add('rem');
-			rem.addEventListener('click', (key)=>{
+			rem.addEventListener('click', (key, option)=>{
 				var query= confirm(`Are you sure you want to permanently delete this form?\n${key}`);
 				if(query===true){
 					file.remove(key);
-					document.getElementById('option'+ key).classList.add('removed');
+					option.classList.add('removed');
+					//Or
+					//document.querySelector(`div.option[URL="${key}"]`).classList.add('removed');
 				}
 			});
 			bar.appendChild(rem);
@@ -85,10 +88,11 @@ function GET(URL){
 	file.get(URL, (items)=>{
 		var it= items[URL];
 		for(var i in it){
+			var elmnt= document.getElementById(it[i].id);
 			if(it[i].type!= 'checkbox'){
-				document.getElementById(it[i].id).value=it[i].value;
+				elmnt.value=it[i].value;
 			}
-			else document.getElementById(it[i].id).checked=it[i].checked;
+			else elmnt.checked=it[i].checked;
 		}
 	});
 }
